@@ -1,0 +1,16 @@
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap');
+
+/* Tailwind css & DaisyUi */
+@import "tailwindcss";
+@plugin "daisyui";
+
+/* Headings use Outfit */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Outfit', sans-serif;
+}
+
+/* Base styles */
+body {
+  font-family: 'Inter', sans-serif;
+}

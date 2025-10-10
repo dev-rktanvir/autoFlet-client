@@ -4,6 +4,12 @@
 /* Tailwind css & DaisyUi */
 @import "tailwindcss";
 @plugin "daisyui";
+@plugin "daisyui/theme" {
+  name: "light";
+  default: true;
+  --color-primary: #1ecb15;
+  --color-secondary: #121212;
+}
 
 /* Headings use Outfit */
 h1, h2, h3, h4, h5, h6 {

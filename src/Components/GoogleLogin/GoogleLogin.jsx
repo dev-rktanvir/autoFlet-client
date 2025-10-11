@@ -1,8 +1,31 @@
 import { FcGoogle } from "react-icons/fc";
+import useAuth from "../../hooks/useAuth/useAuth";
+import useAlert from "../../hooks/useAlert/useAlert";
+import { useLocation, useNavigate } from "react-router";
 
 const GoogleLogin = () => {
+    const { googleLogin } = useAuth();
+    const showAlert = useAlert();
+    const location = useLocation();
+    const navigate = useNavigate();
+
     const handleGoogleSignIn = () => {
-        alert("Google Sign-In Clicked");
+        googleLogin()
+            .then(res => {
+                showAlert({
+                    title: 'Login Successful!',
+                    text: 'You have logged in with Google. Welcome to AutoFlet!',
+                    icon: 'success',
+                })
+                navigate(location?.state || '/');
+            })
+            .catch(error => {
+                showAlert({
+                    title: 'Login Failed',
+                    text: 'There was a problem logging in with Google. Please try again.',
+                    icon: 'error',
+                })
+            })
     };
     return (
         <button

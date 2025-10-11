@@ -1,8 +1,14 @@
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import GoogleLogin from "../../../Components/GoogleLogin/GoogleLogin";
+import useAuth from "../../../hooks/useAuth/useAuth";
+import useAlert from "../../../hooks/useAlert/useAlert";
 
 const LoginPage = () => {
+    const { loginUser } = useAuth();
+    const showAlert = useAlert();
+    const location = useLocation();
+    const navigate = useNavigate();
     const {
         register,
         handleSubmit,
@@ -10,7 +16,22 @@ const LoginPage = () => {
     } = useForm();
 
     const onSubmit = (data) => {
-        console.log("Login Data:", data);
+        loginUser(data.email, data.password)
+            .then(res => {
+                showAlert({
+                    title: 'Login Successful!',
+                    text: 'Welcome back to AutoFlet!',
+                    icon: 'success',
+                });
+                navigate(location?.state || '/');
+            })
+            .catch(error => {
+                showAlert({
+                    title: 'Login Failed!',
+                    text: 'Invalid username or password. Please try again.',
+                    icon: 'error',
+                });
+            })
     };
 
     return (

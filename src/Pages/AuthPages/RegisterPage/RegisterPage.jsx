@@ -1,8 +1,13 @@
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import GoogleLogin from "../../../Components/GoogleLogin/GoogleLogin";
+import useAuth from "../../../hooks/useAuth/useAuth";
+import useAlert from "../../../hooks/useAlert/useAlert";
 
 const RegisterPage = () => {
+    const { createUser } = useAuth();
+    const showAlert = useAlert();
+    const navigate = useNavigate();
     const {
         register,
         handleSubmit,
@@ -11,8 +16,24 @@ const RegisterPage = () => {
     } = useForm();
 
     const onSubmit = (data) => {
-        console.log("Form Data:", data);
-        reset();
+        createUser(data.email, data.password)
+            .then(result => {
+                console.log(result.user)
+                showAlert({
+                    title: 'Registration Successful!',
+                    text: 'Your account has been created. Welcome AutoFlet!',
+                    icon: 'success',
+                });
+                reset();
+                navigate('/');
+            })
+            .catch(error => {
+                showAlert({
+                    title: 'Registration Failed',
+                    text: 'Something Wrong. Try Again',
+                    icon: 'error',
+                });
+            })
     };
 
     return (

@@ -1,15 +1,28 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import Logo from "../Logo/Logo";
+import useAuth from "../../hooks/useAuth/useAuth";
+import useAlert from "../../hooks/useAlert/useAlert";
 
 const Navbar = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const { user, logoutUser } = useAuth();
+    const showAlert = useAlert();
+    const navigate = useNavigate();
     const [scrolled, setScrolled] = useState(false);
     const [hidden, setHidden] = useState(false);
     const [lastScrollTop, setLastScrollTop] = useState(0);
 
-    const handleAuthToggle = () => setIsLoggedIn(!isLoggedIn);
-
+    const handleLogout = () => {
+        logoutUser()
+            .then(res => {
+                showAlert({
+                    title: 'Logout Successful!',
+                    text: 'You have been logged out. See you next time!',
+                    icon: 'success',
+                })
+                navigate('/');
+            })
+    }
     useEffect(() => {
         const handleScroll = () => {
             const currentScroll = window.scrollY;
@@ -31,18 +44,18 @@ const Navbar = () => {
         return () => window.removeEventListener("scroll", handleScroll);
     }, [lastScrollTop]);
 
-    const navItems = isLoggedIn
+    const navItems = user
         ? [
-              { name: "Home", path: "/" },
-              { name: "Available Cars", path: "/cars" },
-              { name: "Add Car", path: "/add-car" },
-              { name: "My Cars", path: "/my-cars" },
-              { name: "My Bookings", path: "/bookings" },
-          ]
+            { name: "Home", path: "/" },
+            { name: "Available Cars", path: "/cars" },
+            { name: "Add Car", path: "/add-car" },
+            { name: "My Cars", path: "/my-cars" },
+            { name: "My Bookings", path: "/bookings" },
+        ]
         : [
-              { name: "Home", path: "/" },
-              { name: "Available Cars", path: "/cars" },
-          ];
+            { name: "Home", path: "/" },
+            { name: "Available Cars", path: "/cars" },
+        ];
 
     return (
         <nav
@@ -70,20 +83,21 @@ const Navbar = () => {
                 </ul>
 
                 <div>
-                    {isLoggedIn ? (
+                    {user ? (
                         <button
-                            onClick={handleAuthToggle}
+                            onClick={handleLogout}
                             className="bg-primary text-white px-8 py-2 rounded-lg hover:opacity-90 transition cursor-pointer"
                         >
                             Logout
                         </button>
                     ) : (
-                        <button
-                            onClick={handleAuthToggle}
-                            className="bg-primary text-white px-8 py-2 rounded-lg hover:opacity-90 transition cursor-pointer"
-                        >
-                            Login
-                        </button>
+                        <Link to='/login'>
+                            <button
+                                className="bg-primary text-white px-8 py-2 rounded-lg hover:opacity-90 transition cursor-pointer"
+                            >
+                                Login
+                            </button>
+                        </Link>
                     )}
                 </div>
             </div>

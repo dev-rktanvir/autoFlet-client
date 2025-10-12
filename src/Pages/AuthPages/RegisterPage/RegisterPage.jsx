@@ -3,11 +3,13 @@ import { Link, useNavigate } from "react-router";
 import GoogleLogin from "../../../Components/GoogleLogin/GoogleLogin";
 import useAuth from "../../../hooks/useAuth/useAuth";
 import useAlert from "../../../hooks/useAlert/useAlert";
+import useHandleImg from "../../../hooks/useHandleImg/useHandleImg";
 
 const RegisterPage = () => {
-    const { createUser } = useAuth();
+    const { createUser, profileUpdate } = useAuth();
     const showAlert = useAlert();
     const navigate = useNavigate();
+    const { handleImageChange, preview, uploadedUrl, loading, resetImage } = useHandleImg();
     const {
         register,
         handleSubmit,
@@ -18,14 +20,23 @@ const RegisterPage = () => {
     const onSubmit = (data) => {
         createUser(data.email, data.password)
             .then(result => {
-                console.log(result.user)
                 showAlert({
                     title: 'Registration Successful!',
                     text: 'Your account has been created. Welcome AutoFlet!',
                     icon: 'success',
                 });
+                // Update User Profile
+                const profileInfo = {
+                    displayName: data.name,
+                    photoURL: uploadedUrl
+                }
+                profileUpdate(profileInfo)
+                    .then(() => { })
+                    .catch(error => { })
+                    
                 reset();
                 navigate('/');
+                resetImage();
             })
             .catch(error => {
                 showAlert({
@@ -160,9 +171,17 @@ const RegisterPage = () => {
                             <input
                                 type="file"
                                 accept="image/*"
-                                {...register("photo")}
+                                onChange={handleImageChange}
                                 className="w-full border border-gray-300 rounded-lg px-3 py-2 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary"
                             />
+                            {preview && (
+                                <img
+                                    src={preview}
+                                    alt="Medicine Preview"
+                                    className="w-20 h-20 sm:w-24 sm:h-24 mt-2 object-cover rounded-lg"
+                                />
+                            )}
+                            {loading && <p>Uploading...</p>}
                         </div>
                     </div>
 

@@ -82,14 +82,23 @@ const Navbar = () => {
                     ))}
                 </ul>
 
-                <div>
+                <div className="flex items-center gap-4">
                     {user ? (
-                        <button
-                            onClick={handleLogout}
-                            className="bg-primary text-white px-8 py-2 rounded-lg hover:opacity-90 transition cursor-pointer"
-                        >
-                            Logout
-                        </button>
+                        <>
+                            {user.photoURL && (
+                                <img
+                                    src={user.photoURL}
+                                    alt="Profile"
+                                    className="w-12 h-12 rounded-full object-cover border-2 border-primary"
+                                />
+                            )}
+                            <button
+                                onClick={handleLogout}
+                                className="bg-primary text-white px-6 py-2 rounded-lg hover:opacity-90 transition cursor-pointer"
+                            >
+                                Logout
+                            </button>
+                        </>
                     ) : (
                         <Link to='/login'>
                             <button
@@ -100,6 +109,7 @@ const Navbar = () => {
                         </Link>
                     )}
                 </div>
+
             </div>
         </nav>
     );

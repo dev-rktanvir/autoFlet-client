@@ -4,6 +4,8 @@ import Home from "../Pages/Home/Home";
 import ErrorPage from "../Pages/ErrorPage/ErrorPage";
 import RegisterPage from "../Pages/AuthPages/RegisterPage/RegisterPage";
 import LoginPage from "../Pages/AuthPages/LoginPage/LoginPage";
+import AddCar from "../Pages/AddCar/AddCar";
+import MyCars from "../Pages/MyCars/MyCars";
 
 
 export const router = createBrowserRouter([
@@ -22,6 +24,14 @@ export const router = createBrowserRouter([
             {
                 path: '/login',
                 Component: LoginPage
+            },
+            {
+                path: '/add-car',
+                Component: AddCar
+            },
+            {
+                path: '/my-cars',
+                Component: MyCars
             }
         ]
     },

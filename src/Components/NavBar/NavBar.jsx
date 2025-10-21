@@ -1,10 +1,13 @@
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useLocation } from "react-router";
 import { useEffect, useState } from "react";
 import Logo from "../Logo/Logo";
 import useAuth from "../../hooks/useAuth/useAuth";
 import useAlert from "../../hooks/useAlert/useAlert";
 
 const Navbar = () => {
+    const location = useLocation();
+    const isHome = location.pathname === "/";
+
     const { user, logoutUser } = useAuth();
     const showAlert = useAlert();
     const navigate = useNavigate();
@@ -13,24 +16,21 @@ const Navbar = () => {
     const [lastScrollTop, setLastScrollTop] = useState(0);
 
     const handleLogout = () => {
-        logoutUser()
-            .then(res => {
-                showAlert({
-                    title: 'Logout Successful!',
-                    text: 'You have been logged out. See you next time!',
-                    icon: 'success',
-                })
-                navigate('/');
-            })
-    }
+        logoutUser().then(() => {
+            showAlert({
+                title: "Logout Successful!",
+                text: "You have been logged out. See you next time!",
+                icon: "success",
+            });
+            navigate("/");
+        });
+    };
+
     useEffect(() => {
         const handleScroll = () => {
             const currentScroll = window.scrollY;
-
-            // Show background if scrolled more than 50px
             setScrolled(currentScroll > 50);
 
-            // Hide navbar when scrolling down, show when scrolling up
             if (currentScroll > lastScrollTop && currentScroll > 100) {
                 setHidden(true);
             } else {
@@ -61,7 +61,7 @@ const Navbar = () => {
         <nav
             className={`
                 fixed top-0 left-0 w-full z-50 transition-all duration-300
-                ${scrolled ? "bg-secondary/80 shadow-md" : "bg-transparent"}
+                ${isHome ? (scrolled ? "bg-secondary/80" : "bg-transparent") : "bg-secondary"}
                 ${hidden ? "-translate-y-full" : "translate-y-0"}
                 text-white
             `}
@@ -100,16 +100,13 @@ const Navbar = () => {
                             </button>
                         </>
                     ) : (
-                        <Link to='/login'>
-                            <button
-                                className="bg-primary text-white px-8 py-2 rounded-lg hover:opacity-90 transition cursor-pointer"
-                            >
+                        <Link to="/login">
+                            <button className="bg-primary text-white px-8 py-2 rounded-lg hover:opacity-90 transition cursor-pointer">
                                 Login
                             </button>
                         </Link>
                     )}
                 </div>
-
             </div>
         </nav>
     );

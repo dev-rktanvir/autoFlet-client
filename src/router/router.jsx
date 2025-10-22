@@ -6,6 +6,7 @@ import RegisterPage from "../Pages/AuthPages/RegisterPage/RegisterPage";
 import LoginPage from "../Pages/AuthPages/LoginPage/LoginPage";
 import AddCar from "../Pages/AddCar/AddCar";
 import MyCars from "../Pages/MyCars/MyCars";
+import UpdateCar from "../Pages/UpdateCar/UpdateCar";
 
 
 export const router = createBrowserRouter([
@@ -32,6 +33,10 @@ export const router = createBrowserRouter([
             {
                 path: '/my-cars',
                 Component: MyCars
+            },
+            {
+                path: '/update-car/:id',
+                Component: UpdateCar
             }
         ]
     },
